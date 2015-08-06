@@ -18,9 +18,10 @@ import sys, io
 def main(argv):
     url = argv[0]
     fType = argv[1]
-    print 'Url is: '+url
+    print 'url is: '+url
     urlParts = urlparse.urlsplit(url)
     urlOb = urllib2.urlopen(url) 
+    print 'Found url'
     html = urlOb.read()
     parsed_html = BeautifulSoup(html, 'html.parser')
     
@@ -28,7 +29,7 @@ def main(argv):
     for link in parsed_html.find_all('a', href=True):
         fLink = link.get('href')
         if fLink.endswith(fType):
-            fLink = url+urlParts.path+fLink
+            fLink = url+fLink
             fileName = fLink.split('/')[-1].split('#')[0].split('?')[0]
             if downloadFile(fLink, fileName, numFiles):
                 numFiles+=1
@@ -55,7 +56,7 @@ def downloadFile(fileLoc, fileName, number):
                 downloaded = downloaded + len(buff)
                 handle.write(buff)
                 download_status = int(downloaded * 100.00 / file_size)
-                print str(download_status)+"%% done"
+                print str(download_status)+"% done"
         return True
     except:
         return False
